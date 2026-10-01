@@ -1,4 +1,6 @@
-﻿$ErrorActionPreference = "Stop"
+﻿# Windows PowerShell 5.1 会把外部程序写入 stderr 的普通信息包装成错误记录。
+# 使用 Continue，并通过 $LASTEXITCODE 判断 Python/pip 是否真正失败，避免误报启动失败。
+$ErrorActionPreference = "Continue"
 
 Set-Location -LiteralPath $PSScriptRoot
 $env:PYTHONUTF8 = "1"
@@ -57,12 +59,10 @@ try {
 
         if (Test-Path -LiteralPath $venvPython) {
             Write-Host "[启动准备] 检测到项目运行环境异常，正在自动修复……" -ForegroundColor Cyan
-            Write-Host "           此操作只会重建当前目录内的 .venv，不会改动课程数据。"
             & $pythonExe @pythonPrefix -m venv --clear .venv
             if ($LASTEXITCODE -ne 0) { throw "创建 Python 运行环境失败。" }
         } else {
-            Write-Host "[首次启动] 正在创建本项目专用的 Python 运行环境……" -ForegroundColor Cyan
-            Write-Host "           文件只会写入当前目录下的 .venv，请勿关闭窗口。"
+            Write-Host "[首次启动] 正在创建本项目专用的 Python 运行环境，不要关闭窗口……" -ForegroundColor Cyan
             & $pythonExe @pythonPrefix -m venv .venv
             if ($LASTEXITCODE -ne 0) { throw "创建 Python 运行环境失败。" }
         }
@@ -77,8 +77,7 @@ try {
     if ($needsInstall) {
         Write-Host "[首次启动] 正在安装程序依赖和登录组件……" -ForegroundColor Cyan
         Write-Host "           首次安装通常需要几分钟，速度取决于网络，请耐心等待。"
-        Write-Host "           安装内容仅供本项目使用，不会修改浏览器或保存平台密码。"
-        Write-Host "           为保持界面整洁，详细安装记录将写入 .bootstrap-install.log。"
+        Write-Host "           详细安装日志见 .bootstrap-install.log。"
 
         & $venvPython -m pip install --disable-pip-version-check --progress-bar off --quiet -e ".[browser]" *> $installLog
         if ($LASTEXITCODE -ne 0) {
