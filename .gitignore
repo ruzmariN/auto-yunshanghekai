@@ -5,6 +5,7 @@ __pycache__/
 .mypy_cache/
 *.pyc
 .cloudriver/
+.bootstrap-install.log
 .coverage
 htmlcov/
 *.egg-info/

@@ -30,6 +30,8 @@
 
 ## 快速开始
 
+如果你完全不熟悉 Python、Git 或命令行，根本看不懂下面教程在说什么，请直接阅读 **[小白教程](小白教程.md)**，这是为你特别准备的完整详细教程。
+
 ### Windows
 
 安装 [Python 3.11+](https://www.python.org/downloads/) 后，双击 `start.cmd`，或在 PowerShell 中运行：
